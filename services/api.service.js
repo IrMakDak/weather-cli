@@ -2,6 +2,7 @@ import axios from "axios";
 import { getKeyValue, TOKEN_DICTIONATY } from "./storage.service.js";
 import https from "https";
 import chalk from "chalk";
+import dedent from "dedent-js";
 
 const getWeatherByHttps = async (city) => {
   const token = await getKeyValue(TOKEN_DICTIONATY.token);
@@ -49,7 +50,18 @@ const getWeatherByAxios = async () => {
     },
   });
 
-  console.log(city + ": " + chalk.yellow(data.current.condition.text));
+  const printWeather = () => {
+    console.log(
+      dedent(
+        `Погода в городе ${chalk.bgWhite(data.location.name)} (${
+          data.location.country
+        }): 
+        ${chalk.yellow(data.current.condition.text)}
+        Температура ${data.current.temp_c} градусов`
+      )
+    );
+  };
+  printWeather();
 
   return data;
 };
